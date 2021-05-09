@@ -21,16 +21,40 @@ const onClickAdd = () => {
   const completeButton = document.createElement("button");
   completeButton.innerText = "完了";
   completeButton.addEventListener("click", () => {
-    alert("complete");
+    // 押された完了ボタンの親タグ削除
+    deleteFromIncompleteList(completeButton.closest("li"));
+
+    // リストの内容を取得
+    const addLi = completeButton.closest("li");
+    const addTarget = completeButton.closest("div");
+    const text = addLi.firstElementChild.firstElementChild.innerText;
+
+    // ボタン部分を初期化
+    addTarget.textContent = null;
+
+    // pタグ生成
+    const addP = document.createElement("p");
+    addP.className = "list-name";
+    addP.innerText = text;
+
+    // ボタン生成
+    const backButton = document.createElement("button");
+    backButton.innerText = "戻す";
+
+    // pタグ、ボタンを追加
+    addTarget.appendChild(addP);
+    addTarget.appendChild(backButton);
+
+    // 完了リストに追加
+    const completeList = document.getElementById("complete-list");
+    completeList.appendChild(addTarget);
   });
 
   // 削除ボタン生成
   const deleteButton = document.createElement("button");
   deleteButton.innerText = "削除";
   deleteButton.addEventListener("click", () => {
-    // 押された削除ボタンの親タグを削除
-    const deleteTarget = deleteButton.closest("li");
-    document.getElementById("incomplete-list").removeChild(deleteTarget);
+    deleteFromIncompleteList(deleteButton.closest("li"));
   });
 
   // 入れ子構造の作成
@@ -42,6 +66,11 @@ const onClickAdd = () => {
   // 未完了ulに追加
   const ul = document.getElementById("incomplete-list");
   ul.appendChild(li);
+};
+
+// 未完了リストから指定の要素を削除
+const deleteFromIncompleteList = (target) => {
+  document.getElementById("incomplete-list").removeChild(target);
 };
 
 document.getElementById("add-button").addEventListener("click", () => {
